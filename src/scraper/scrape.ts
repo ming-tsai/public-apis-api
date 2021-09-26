@@ -9,12 +9,12 @@ import { Category } from "../models/category.interface";
 import { Cors } from "../models/cors.enum";
 import { Dictionary } from "../models/dictionary.interface";
 import { Scrape as IScrape } from "../models/scrape.interface";
-import json from '../data/apis.json';
+import json from '../data/db.json';
 
 export class Scrape implements IScrape {
   filePath: string;
   constructor() {
-    this.filePath = path.resolve(__dirname, "../data/apis.json");
+    this.filePath = path.resolve(__dirname, "../data/db.json");
   }
 
   run(): void {
