@@ -1,0 +1,31 @@
+name: scraper
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{secrets.PAT}}
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.1
+      - name: Create env file
+        run: |
+          touch .env
+          echo PUBLIC_APIS_README=${{ secrets.PUBLIC_APIS_README }} >> .env
+      - run: npm ci
+      - run: npm run scraper
+      - uses: stefanzweifel/git-auto-commit-action@v4.4.1
+        with:
+          commit_message: "chore(data): update at ${{ steps.date.outputs.date }}"
+          branch: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
