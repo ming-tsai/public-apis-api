@@ -1,4 +1,4 @@
 export interface Scrape {
-    filePath: string;
-    run(): void;
+  filePath: string;
+  run(): void;
 }

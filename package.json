@@ -8,7 +8,9 @@
     "build": "tsc",
     "start": "node ./dist/index.js",
     "start:scraper": "node ./dist/scraper/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint */**/*.{js,ts,tsx} --ignore-pattern dist --quiet --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "axios": "^0.21.4",
@@ -23,7 +25,14 @@
     "@types/cheerio": "^0.22.30",
     "@types/node": "^16.10.1",
     "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
+    "@typescript-eslint/parser": "^4.31.2",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.2",
     "nodemon": "^2.0.13",
+    "prettier": "^2.4.1",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
   },
@@ -36,5 +45,15 @@
   "bugs": {
     "url": "https://github.com/ming-tsai/public-apis-api/issues"
   },
-  "homepage": "https://github.com/ming-tsai/public-apis-api#readme"
+  "homepage": "https://github.com/ming-tsai/public-apis-api#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  }
 }

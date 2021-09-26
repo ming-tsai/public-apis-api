@@ -1,36 +1,32 @@
-import axios from "axios";
-import cheerio from "cheerio";
-import fs from "fs";
-import path from "path";
-import { v4 as uuidv4 } from "uuid";
-import { API } from "../models/api.interface";
-import { Auth } from "../models/auth.enum";
-import { Category } from "../models/category.interface";
-import { Cors } from "../models/cors.enum";
-import { Dictionary } from "../models/dictionary.interface";
-import { Scrape as IScrape } from "../models/scrape.interface";
-import json from '../data/db.json';
+import axios from 'axios';
+import cheerio from 'cheerio';
+import fs from 'fs';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { API } from '../models/api.interface';
+import { Auth } from '../models/auth.enum';
+import { Category } from '../models/category.interface';
+import { Cors } from '../models/cors.enum';
+import { Dictionary } from '../models/dictionary.interface';
+import { Scrape as IScrape } from '../models/scrape.interface';
+import json from "../data/db.json";
 
 export class Scrape implements IScrape {
   filePath: string;
   constructor() {
-    this.filePath = path.resolve(__dirname, "../data/db.json");
+    this.filePath = path.resolve(__dirname, '../data/db.json');
   }
 
   run(): void {
     const data = json as unknown as Dictionary<API[]>;
 
-    this.categories(data).then((updated) =>
-      fs.writeFileSync(this.filePath, JSON.stringify(updated), "utf8")
-    );
+    this.categories(data).then((updated) => fs.writeFileSync(this.filePath, JSON.stringify(updated), 'utf8'));
   }
 
-  private categories = async (
-    data: Dictionary<API[]>
-  ): Promise<Dictionary<API[]>> => {
+  private categories = async (data: Dictionary<API[]>): Promise<Dictionary<API[]>> => {
     const html = await this.download();
     const $ = cheerio.load(html);
-    const index = $('h2 > a[href="#index"]').parent().next("ul").children();
+    const index = $('h2 > a[href="#index"]').parent().next('ul').children();
     index.each((_, element) => {
       const { name, apis } = this.getCategory($, element);
       if (data[name]) {
@@ -46,7 +42,7 @@ export class Scrape implements IScrape {
     const url = process.env.PUBLIC_APIS_README;
     let result = '';
     if (!url) {
-      throw new Error("Environment variable PUBLIC_APIS_README is not set");
+      throw new Error('Environment variable PUBLIC_APIS_README is not set');
     }
 
     try {
@@ -60,11 +56,11 @@ export class Scrape implements IScrape {
 
   private getCategory = ($: cheerio.Root, element: cheerio.Element): Category => {
     const name = $(element).text();
-    const href = $("li > a", element).attr("href") as unknown as string;
+    const href = $('li > a', element).attr('href') as unknown as string;
     const title = $(`h3 > a[href="${href}"]`).parent();
-    const table = title.next("table");
+    const table = title.next('table');
     const apis: API[] = [];
-    $("tbody > tr", table).each((index, trElement) => {
+    $('tbody > tr', table).each((index, trElement) => {
       if (index !== 0) {
         apis.push(this.getApi($, trElement));
       }
@@ -75,21 +71,21 @@ export class Scrape implements IScrape {
   getApi($: cheerio.Root, element: cheerio.Element): API {
     const api: API = {
       id: uuidv4(),
-      name: "",
-      url: "",
-      description: "",
+      name: '',
+      url: '',
+      description: '',
       auth: Auth.No,
       with_https: false,
       with_cors: Cors.No,
       updated_at: new Date(),
     };
 
-    const tds = $(element).find("td");
+    const tds = $(element).find('td');
     $(tds).each((i, tdElement) => {
       const val = $(tdElement).text();
       switch (i) {
         case 0:
-          api.url = $("a", tdElement).attr("href") as string;
+          api.url = $('a', tdElement).attr('href') as string;
           api.name = val;
           break;
         case 1:
