@@ -9,7 +9,7 @@ import { Category } from '../models/category.interface';
 import { Cors } from '../models/cors.enum';
 import { Dictionary } from '../models/dictionary.interface';
 import { Scrape as IScrape } from '../models/scrape.interface';
-import json from "../data/db.json";
+import json from '../data/db.json';
 
 export class Scrape implements IScrape {
   filePath: string;
