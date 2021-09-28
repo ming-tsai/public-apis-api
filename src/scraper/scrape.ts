@@ -75,8 +75,8 @@ export class Scrape implements IScrape {
       url: '',
       description: '',
       auth: Auth.No,
-      with_https: false,
-      with_cors: Cors.No,
+      https: false,
+      cors: Cors.No,
       updated_at: new Date(),
     };
 
@@ -95,10 +95,10 @@ export class Scrape implements IScrape {
           api.auth = val as unknown as Auth;
           break;
         case 3:
-          api.with_https = val as unknown as boolean;
+          api.https = val as unknown as boolean;
           break;
         case 4:
-          api.with_cors = val as unknown as Cors;
+          api.cors = val as unknown as Cors;
           break;
       }
     });
@@ -113,8 +113,8 @@ export class Scrape implements IScrape {
         found.url = item.url;
         found.description = item.description;
         found.auth = item.auth;
-        found.with_https = item.with_https;
-        found.with_cors = item.with_cors;
+        found.https = item.https;
+        found.cors = item.cors;
         found.updated_at = item.updated_at;
       } else if (!found) {
         found = item;
@@ -129,8 +129,8 @@ export class Scrape implements IScrape {
       entity.url !== data.url ||
       entity.description !== data.description ||
       entity.auth !== data.auth ||
-      entity.with_https !== data.with_https ||
-      entity.with_cors !== data.with_cors
+      entity.https !== data.https ||
+      entity.cors !== data.cors
     );
   };
 }

@@ -7,7 +7,7 @@ export interface API {
   url: string;
   description: string;
   auth: Auth;
-  with_https: boolean;
-  with_cors: Cors;
+  https: boolean;
+  cors: Cors;
   updated_at: Date;
 }
